@@ -1,0 +1,189 @@
+GET     /bar/orders/:id                 # View order details
+    {
+        "created": "2024-09-10 12:00:00",
+        "paid": false,
+        "subtotal": 0,
+        "taxes": 0,
+        "discounts": 0,
+        "items_summary": [
+            {
+                "name": "Quilmes",
+                "price_per_unit": 120,
+                "total": 5
+            },
+            {
+                "name": "Corona",
+                "price_per_unit": 115,
+                "total": 2
+            },
+            {
+                "name": "Club Colombia",
+                "price_per_unit": 110,
+                "total": 2
+            }
+        ],
+        "rounds": [
+            {
+                "created":  "2024-09-10 12:00:30",
+                "items": [
+                    {
+                        "name": "Corona",
+                        "quantity": 2
+                    },
+                    {
+                        "name": "Club Colombia",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "created":  "2024-09-10 12:20:31",
+                "items": [
+                    {
+                        "name": "Club Colombia",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Quilmes",
+                        "price": 2
+                    }
+                ]
+            },
+            {
+                "created":  "2024-09-10 12:43:21",
+                "items": [
+                    {
+                        "name": "Quilmes",
+                        "quantity": 3
+                    }
+                ]
+            }
+
+        ]
+    }
+    Return
+    200     OK
+
+El estado de orden puede ser una salida parcial de este endpoint
+Ejemplo
+    {
+        "created": "2024-09-10 12:00:00",
+        "paid": false,
+        "subtotal": 0,
+        "taxes": 0,
+        "discounts": 0,
+        "items_summary": [
+            {
+                "name": "Quilmes",
+                "price_per_unit": 120,
+                "total": 5
+            },
+            {
+                "name": "Corona",
+                "price_per_unit": 115,
+                "total": 2
+            },
+            {
+                "name": "Club Colombia",
+                "price_per_unit": 110,
+                "total": 2
+            }
+        ]
+    }
+
+GET     /bar/orders/:id_not_found           # View order not found
+    Return
+    404     NOT FOUND
+
+-----------------------------------------------------------------------------------------------
+
+POST    /bar/orders                     # Create empty order
+    Return
+    201     CREATED
+    {
+        "id": "1"
+    }
+
+GET     /bar/orders                     # List orders
+    [
+        {
+            "id": "1"
+            ...
+        },
+        {
+            "id": "2"
+            ...
+        },
+        ...
+    ]
+    Return
+    200     OK
+
+POST    /bar/orders/:id/rounds          # Add round
+    [
+        {
+            "name": "Club Colombia",
+            "quantity": 1
+        },
+        {
+            "name": "Quilmes",
+            "price": 2
+        }
+    ]
+    Return
+    201     CREATED
+
+POST    /bar/orders/:id_found/rounds    # Add round not found
+    Return
+    404     NOT FOUND
+
+POST    /bar/orders/:id/rounds          # Add round without stock
+    [
+        {
+            "name": "Club Colombia",
+            "quantity": 1
+        },
+        {
+            "name": "Quilmes",
+            "price": 2
+        }
+    ]
+    Return
+    409     CONFLICT
+
+POST    /bar/orders/:id/rounds          # Add round with invalid beer
+    [
+        {
+            "name": "Club Colombia",
+            "quantity": 1
+        },
+        {
+            "name": "Isenbeck",
+            "price": 2
+        }
+    ]
+    Return
+    400     BAD REQUEST
+
+GET     /bar/stocks                     # Este tal vez no sea necesario, puede estar el stock fijo en el repo
+200     OK
+{
+    "last_updated": "2024-09-10 12:00:00",
+    "beers": [
+        {
+            "name": "Corona",
+            "price": 115,
+            "quantity": 2
+        },
+        {
+            "name": "Quilmes",
+            "price": 120,
+            "quantity": 0
+        },
+        {
+            "name": "Club Colombia",
+            "price": 110,
+            "quantity": 3
+        }
+    ]
+}
