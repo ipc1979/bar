@@ -1,10 +1,14 @@
 from fastapi.testclient import TestClient
+import pytest
+from app.use_cases.orders import get_order_by_id
 
 from .main import app
 
-client = TestClient(app)
+@pytest.fixture
+def client():
+    return TestClient(app)
 
-def test_get_order_by_id():
+def test_get_order_by_id(client):
     response = client.get("/orders/1")
     assert response.status_code == 200
     assert response.json() == {
@@ -69,7 +73,7 @@ def test_get_order_by_id():
         ]
     }
 
-def test_get_orders_by_id_when_id_not_found():
+def test_get_orders_by_id_when_id_not_found(client):
     response = client.get("/orders/2")
     assert response.status_code == 404
     assert response.json() == {
