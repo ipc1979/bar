@@ -1,6 +1,5 @@
 from fastapi.testclient import TestClient
 import pytest
-from app.use_cases.orders import get_order_by_id
 
 from .main import app
 
@@ -12,7 +11,7 @@ def test_get_order_by_id(client):
     response = client.get("/orders/1")
     assert response.status_code == 200
     assert response.json() == {
-        "created": "2024-09-10 12:00:00",
+        "created": "2024-09-10T12:00:00",
         "paid": False,
         "subtotal": 0,
         "taxes": 0,
@@ -33,10 +32,10 @@ def test_get_order_by_id(client):
                 "price_per_unit": 110,
                 "total": 2
             }
-        ],
+        ],        
         "rounds": [
             {
-                "created":  "2024-09-10 12:00:30",
+                "created":  "2024-09-10T12:00:30",
                 "items": [
                     {
                         "name": "Corona",
@@ -49,7 +48,7 @@ def test_get_order_by_id(client):
                 ]
             },
             {
-                "created":  "2024-09-10 12:20:31",
+                "created":  "2024-09-10T12:20:31",
                 "items": [
                     {
                         "name": "Club Colombia",
@@ -57,12 +56,12 @@ def test_get_order_by_id(client):
                     },
                     {
                         "name": "Quilmes",
-                        "price": 2
+                        "quantity": 2
                     }
                 ]
             },
             {
-                "created":  "2024-09-10 12:43:21",
+                "created":  "2024-09-10T12:43:21",
                 "items": [
                     {
                         "name": "Quilmes",
@@ -79,3 +78,5 @@ def test_get_orders_by_id_when_id_not_found(client):
     assert response.json() == {
         "detail": "Order not found"
     }
+
+    
